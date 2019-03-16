@@ -18,7 +18,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/task_name"
+                android:id="@+id/task_name_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -39,7 +39,7 @@
                 android:text="TextView"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/task_name" />
+                app:layout_constraintTop_toBottomOf="@+id/task_name_edit" />
 
             <TextView
                 android:id="@+id/contained_activites"
