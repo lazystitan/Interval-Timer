@@ -1,6 +1,7 @@
 package com.riton.interval_timer;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -40,13 +41,22 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("insert into activity (name,activity_time) values ('休息',180)");
         db.execSQL("insert into activity (name,activity_time) values ('瑜伽',600)");
         db.execSQL("insert into activity (name,activity_time) values ('平静',1200)");
-        db.execSQL("insert into task (name,circulation_number,activity_number,activity_id_string) values ('跑步',3,2,'0,1')");
-        db.execSQL("insert into task (name,circulation_number,activity_number,activity_id_string) values ('瑜伽',5,2,'2,3')");
+        db.execSQL("insert into task (name,circulation_number,activity_number,activity_id_string) values ('跑步',3,2,'1,2')");
+        db.execSQL("insert into task (name,circulation_number,activity_number,activity_id_string) values ('瑜伽',5,2,'3,4')");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //暂时不写
+    }
+
+    public int getTaskCount()
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from task",null);
+        int taskCount = cursor.getCount();
+        cursor.close();
+        return  taskCount;
     }
 
 

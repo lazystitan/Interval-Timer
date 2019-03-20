@@ -63,7 +63,13 @@ public class MyActivity {
     {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("select * from activity where id ="+id,null);
+        Cursor cursor = sqLiteDatabase.rawQuery("select * from activity where id = "+id,null);
+//        Cursor cursor = sqLiteDatabase.rawQuery("select * from activity",null);
+        System.out.println("select * from activity where id = "+id);
+
+//        System.out.println(cursor.getCount());
+        if (cursor.getCount() == 0)
+            System.out.println("Wrong");
         cursor.moveToFirst();
         id = cursor.getInt(0);
         name = cursor.getString(1);

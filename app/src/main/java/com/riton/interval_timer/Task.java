@@ -5,10 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Task {
+public class Task implements Serializable
+{
     private Context context;
 
     private int id;
@@ -18,10 +21,21 @@ public class Task {
     private int [] activityIds;
     private List<MyActivity> activities;
 
+//    private static int tasksNumber;
+//
+//    public static int getTasksNumber(Context _context)
+//    {
+//        DbHelper dbHelper = new DbHelper(_context);
+//        SQLiteDatabase db = dbHelper.getReadableDatabase();
+//        db.get
+//        return
+//    }
+
     public Task(Context _context)
     {
         context = _context;
         id = 0;
+        activities = new ArrayList<MyActivity>();
     }
 
     //构造方法
@@ -34,6 +48,7 @@ public class Task {
         circulationNumber = _circulationNumber;
         activityNumber = _activityNumber;
         activityIds = _activityIds;
+        activities = new ArrayList<MyActivity>();
     }
 
     //获得属性
@@ -108,11 +123,23 @@ public class Task {
             for (int i=0; i<temp.length;i++)
                 activityIds[i] = Integer.valueOf(temp[i]);
 
+            System.out.println("******This task info******");
+            System.out.println("id:"+id);
+            System.out.println("name:"+name);
+            System.out.println("circulationNumber:"+ circulationNumber);
+            System.out.println("activityNumber:"+activityNumber);
+//            System.out.println(activityIds);
+            for (int id:activityIds)
+                System.out.println(id);
+            System.out.println("**************************");
+
             for (int id:activityIds)
             {
                 MyActivity myActivity = new MyActivity(context);
                 myActivity.setId(id);
                 myActivity.getActivity();
+                System.out.println(myActivity.getName());
+                System.out.println(myActivity.getActivityTime());
                 activities.add(myActivity);
             }
 
