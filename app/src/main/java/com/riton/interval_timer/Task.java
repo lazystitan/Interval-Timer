@@ -190,4 +190,9 @@ public class Task implements Serializable
 
         return names.toString();
     }
+
+    public List<MyActivity> getActivities()
+    {
+        return new ArrayList<MyActivity>(activities);
+    }
 }

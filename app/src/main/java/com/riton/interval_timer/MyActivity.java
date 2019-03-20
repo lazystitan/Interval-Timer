@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.riton.interval_timer.DbHelper;
 
-public class MyActivity {
+import java.io.Serializable;
+
+public class MyActivity implements Serializable {
     private Context context;
 
     private int id;

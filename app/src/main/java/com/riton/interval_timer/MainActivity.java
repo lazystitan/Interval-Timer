@@ -18,10 +18,10 @@ public class MainActivity extends AppCompatActivity {
 
         addTask = (FloatingActionButton) findViewById(R.id.add_task);
         recyclerView = (RecyclerView) findViewById(R.id.task_list);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(new MainActivityAdapter(this));
-
 
     }
 }
