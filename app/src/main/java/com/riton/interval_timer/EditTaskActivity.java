@@ -40,19 +40,25 @@ public class EditTaskActivity extends AppCompatActivity {
         id = intent.getIntExtra("id",-1);
         System.out.println("EditTaskActivity is "+id);
 
-        task = new Task(this);
-        task.setId(id);
-        task.getTask();
+        if (id != -1) {
+            task = new Task(this);
+            task.setId(id);
+            task.getTask();
 
-        taskName.setText(task.getName());
-        totalTime.setText(new StringBuilder("总时长：").append(String.valueOf(task.getTotalTime()).toString()));
-        complexActivityTime.setText(new StringBuilder("复合活动时长：").append(String.valueOf(task.getComplexActivityTime())));
-        circulationNumber.setText(String.valueOf(task.getCirculationNumber()));
+            taskName.setText(task.getName());
+            totalTime.setText(new StringBuilder("总时长：").append(String.valueOf(task.getTotalTime()).toString()));
+            complexActivityTime.setText(new StringBuilder("复合活动时长：").append(String.valueOf(task.getComplexActivityTime())));
+            circulationNumber.setText(String.valueOf(task.getCirculationNumber()));
 
-        recyclerView = findViewById(R.id.edit_task_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this,task));
-
+            recyclerView = findViewById(R.id.edit_task_recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task));
+        }
+        else
+        {
+            String name = intent.getStringExtra("name");
+            taskName.setText(name);
+        }
 //        taskName.setText(intent.getStringExtra("taskName"));
 
 //        task = (Task) getIntent().getSerializableExtra("task");

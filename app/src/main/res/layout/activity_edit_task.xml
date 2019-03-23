@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:text="任务名"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/total_time_edit"
