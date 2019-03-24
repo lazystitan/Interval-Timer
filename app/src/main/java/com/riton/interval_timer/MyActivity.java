@@ -22,9 +22,16 @@ public class MyActivity implements Serializable {
         id = 0;
     }
 
-    public MyActivity(int _id, String _name, int _activityTime)
+    public MyActivity(Context context, int _id, String _name, int _activityTime)
     {
         id = _id;
+        name = _name;
+        activityTime = _activityTime;
+    }
+
+    public MyActivity(Context context, String _name, int _activityTime)
+    {
+        id = 0;
         name = _name;
         activityTime = _activityTime;
     }

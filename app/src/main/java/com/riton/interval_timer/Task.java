@@ -66,6 +66,11 @@ public class Task implements Serializable
         return name;
     }
 
+    public void setName(String _name)
+    {
+        name = _name;
+    }
+
     public int getCirculationNumber() {
         return circulationNumber;
     }
@@ -194,5 +199,11 @@ public class Task implements Serializable
     public List<MyActivity> getActivities()
     {
         return new ArrayList<MyActivity>(activities);
+    }
+
+    public void addActivity(MyActivity _activity)
+    {
+        activities.add(_activity);
+        activityNumber +=1;
     }
 }
