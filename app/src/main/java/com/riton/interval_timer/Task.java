@@ -75,6 +75,10 @@ public class Task implements Serializable
         return circulationNumber;
     }
 
+    public void setCirculationNumber(int circulationNumber) {
+        this.circulationNumber = circulationNumber;
+    }
+
     public int getActivityNumber()  {
         return activityNumber;
     }
@@ -206,4 +210,17 @@ public class Task implements Serializable
         activities.add(_activity);
         activityNumber +=1;
     }
+
+//    public MyActivity deleteActivityByName(String activityName)
+//    {
+//        for (MyActivity activity:activities)
+//        {
+//            if (activity.getName() == activityName)
+//            {
+//                activities.remove(activity);
+//                return activity;
+//            }
+//        }
+//        return null;
+//    }
 }

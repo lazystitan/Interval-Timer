@@ -115,7 +115,7 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
 
             edit = (Button) itemView.findViewById(R.id.edit_task_btn);
             start = (Button) itemView.findViewById(R.id.start_task_btn);
-            delete = (Button) itemView.findViewById(R.id.delete_task_btn);
+//            delete = (Button) itemView.findViewById(R.id.delete_task_btn);
         }
     }
 }

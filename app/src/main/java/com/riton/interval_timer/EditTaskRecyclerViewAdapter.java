@@ -1,15 +1,19 @@
 package com.riton.interval_timer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRecyclerViewAdapter.ActivityViewHolder> {
 
@@ -37,6 +41,32 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
             MyActivity myActivity = activities.get(i);
             activityViewHolder.activityName.setText(myActivity.getName());
             activityViewHolder.activityTime.setText(new StringBuilder("活动时长：").append(myActivity.getActivityTime()).toString());
+//            activityViewHolder.activityEditBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//
+//                    LayoutInflater layoutInflater = LayoutInflater.from(context);
+//                    View view = layoutInflater.inflate(R.layout.edit_activity_layout,null);
+//                    builder.setView(view);
+//                    builder.setTitle("编辑活动");
+//                    final EditText activityName = (EditText) view.findViewById(R.id.get_activityname_edit_activity_dialog);
+//                    final EditText activityTime = (EditText) view.findViewById(R.id.get_activitytime_edit_activity_dialog);
+//
+//                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            activityViewHolder.activityName.setText(activityName.getText().toString());
+//                            activityViewHolder.activityTime.setText(Integer.valueOf(activityTime.getText().toString()));
+//                        }
+//                    });
+//
+//                    builder.setCancelable(true);
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//
+//                }
+//            });
     }
 
     @Override
@@ -47,12 +77,14 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
     public static  class ActivityViewHolder extends RecyclerView.ViewHolder{
         protected TextView activityName;
         protected TextView activityTime;
-        protected Button activityEditBtn;
+//        protected Button activityEditBtn;
         public ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
             activityName = (TextView) itemView.findViewById(R.id.activity_name);
             activityTime = (TextView) itemView.findViewById(R.id.activity_time);
-            activityEditBtn = (Button) itemView.findViewById(R.id.activity_edit_btn);
+//            activityEditBtn = (Button) itemView.findViewById(R.id.activity_edit_btn);
         }
     }
+
+
 }
