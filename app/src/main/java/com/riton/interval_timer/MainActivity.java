@@ -1,5 +1,6 @@
 package com.riton.interval_timer;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                System.out.println("alright");
+//                                System.out.println("alright");
                                 String taskName = editTaskNameAlterDialog.getText().toString();
                                 Intent intent =new Intent(context, EditTaskActivity.class);
                                 intent.putExtra("name",taskName);
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 alert.show();
             }
         });
+
+        TaskSavingApplication taskSavingApplication = (TaskSavingApplication) this.getApplication();
+        taskSavingApplication.setTestFlag(100);
+
 
     }
 }

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -42,6 +43,17 @@ public class EditTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
+        TaskSavingApplication taskSavingApplication = (TaskSavingApplication) this.getApplication();
+        //创建一个新的空的task对象
+        task = new Task(getApplicationContext());
+//        task.setId(10);
+        //将它的引用保存在全局变量中
+        taskSavingApplication.setTask(task);
+//        task.setId(20);
+//        Task task2 = taskSavingApplication.getTask();
+//        Toast.makeText(getApplicationContext(),String.valueOf(task2.getId()),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),String.valueOf(taskSavingApplication.getTestFlag()),Toast.LENGTH_SHORT).show();
+
         taskName = (TextView) findViewById(R.id.task_name_edit);
         totalTime = (TextView) findViewById(R.id.total_time_edit);
         complexActivityTime = (TextView) findViewById(R.id.complex_activity_time_edit);
@@ -51,9 +63,8 @@ public class EditTaskActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getIntExtra("id",-1);
-        System.out.println("EditTaskActivity is "+id);
-        //创建一个新的空的task对象
-        task = new Task(this);
+//        System.out.println("EditTaskActivity is "+id);
+//        task = new Task(this);
 
         recyclerView = findViewById(R.id.edit_task_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

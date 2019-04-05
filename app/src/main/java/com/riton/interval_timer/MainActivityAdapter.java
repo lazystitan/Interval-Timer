@@ -1,11 +1,14 @@
 package com.riton.interval_timer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,13 +81,36 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EditTaskActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("task",thisTask);
-//                intent.putExtra("task",thisTask);
-//                intent.putExtras(bundle);
                 intent.putExtra("id",thisTask.getId());
-                intent.putExtra("taskName",thisTask.getName());
+//                intent.putExtra("taskName",thisTask.getName());
                 context.startActivity(intent);
+            }
+        });
+
+        taskViewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("删除任务？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+//                    builder.setCancelable(true);
+                builder.setNegativeButton("取消",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                return false;
             }
         });
 
@@ -102,9 +128,11 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
         protected  TextView containedActivities;
         protected  TextView totalTime;
 
+        protected CardView cardView;
+
         protected  Button edit;
         protected  Button start;
-        protected  Button delete;
+//        protected  Button delete;
 
         TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +140,8 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
             circulationNumber = (TextView) itemView.findViewById(R.id.circulation_number);
             containedActivities = (TextView) itemView.findViewById(R.id.contained_activities);
             totalTime = (TextView) itemView.findViewById(R.id.total_time);
+
+            cardView = (CardView) itemView.findViewById(R.id.fragment_task_cardview_cardview);
 
             edit = (Button) itemView.findViewById(R.id.edit_task_btn);
             start = (Button) itemView.findViewById(R.id.start_task_btn);
