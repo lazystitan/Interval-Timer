@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -27,11 +26,9 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
 
     public MainActivityAdapter(Context _context) {
         super();
-//        taskList = _taskList;
         context = _context;
         taskList = new ArrayList<Task>();
         DbHelper dbHelper = new DbHelper(context);
-//        int taskCount = dbHelper.getTaskCount();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id from task",null);
         while(cursor.moveToNext())
@@ -43,7 +40,6 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
             taskList.add(task);
         }
         cursor.close();
-//        db.close();
 
     }
 
@@ -56,7 +52,6 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
                 inflate(R.layout.fragment_task_cardview, viewGroup, false);
 
         return new TaskViewHolder(view);
-
     }
 
     @Override
@@ -139,7 +134,6 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
 
         protected  Button edit;
         protected  Button start;
-//        protected  Button delete;
 
         TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -152,7 +146,6 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
 
             edit = (Button) itemView.findViewById(R.id.edit_task_btn);
             start = (Button) itemView.findViewById(R.id.start_task_btn);
-//            delete = (Button) itemView.findViewById(R.id.delete_task_btn);
         }
     }
 }

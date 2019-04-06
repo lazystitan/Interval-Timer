@@ -32,9 +32,6 @@ public class EditTaskActivity extends AppCompatActivity {
     private TextView totalTime;
     private TextView complexActivityTime;
     private EditText circulationNumber;
-//    private TextView  circulationNumber;
-//    private TextView containedActivities;
-//    private TextView totalTime;
 
     private Task task;
 
@@ -46,13 +43,8 @@ public class EditTaskActivity extends AppCompatActivity {
         TaskSavingApplication taskSavingApplication = (TaskSavingApplication) this.getApplication();
         //创建一个新的空的task对象
         task = new Task(getApplicationContext());
-//        task.setId(10);
         //将它的引用保存在全局变量中
         taskSavingApplication.setTask(task);
-//        task.setId(20);
-//        Task task2 = taskSavingApplication.getTask();
-//        Toast.makeText(getApplicationContext(),String.valueOf(task2.getId()),Toast.LENGTH_SHORT).show();
-//        Toast.makeText(getApplicationContext(),String.valueOf(taskSavingApplication.getTestFlag()),Toast.LENGTH_SHORT).show();
 
         taskName = (TextView) findViewById(R.id.task_name_edit);
         totalTime = (TextView) findViewById(R.id.total_time_edit);
@@ -63,8 +55,6 @@ public class EditTaskActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getIntExtra("id",-1);
-//        System.out.println("EditTaskActivity is "+id);
-//        task = new Task(this);
 
         recyclerView = findViewById(R.id.edit_task_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -117,16 +107,12 @@ public class EditTaskActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //新创建的一个活动对象，并通过在对话框中的数据初始化
-//                                MyActivity activity =
-//                                        new MyActivity(context,getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
                                 //将这个新的activity加入到task的任务中
                                 task.addActivity(getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
                                 //重新设置recycler的adapter以刷新页面
                                 recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(context,task));
 
                                 //更新其他要显示的信息
-//                                taskName.setText(task.getName());
                                 totalTime.setText(new StringBuilder("总时长：")
                                         .append(String.valueOf(task.getTotalTime()).toString()));
                                 complexActivityTime.setText(new StringBuilder("复合活动时长：").
@@ -172,19 +158,5 @@ public class EditTaskActivity extends AppCompatActivity {
                         append(String.valueOf(task.getComplexActivityTime())));
             }
         });
-//        taskName.setText(intent.getStringExtra("taskName"));
-
-//        task = (Task) getIntent().getSerializableExtra("task");
-//        Bundle bundle = getIntent().getExtras();
-//        task = (Task) bundle.getSerializable("task");
-//        StringBuilder taskNameStr = new StringBuilder("任务名:");
-
-
-//        taskNameStr.append(task.getName());
-
-//        taskName.setText(taskName.toString());
-
-
-
     }
 }

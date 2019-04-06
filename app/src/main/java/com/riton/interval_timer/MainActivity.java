@@ -47,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.setView(view);
 
                 builder.setTitle("新建任务");
-//                builder.setMessage("这是AlertDialog中的样式");
-//                builder.setNegativeButton("取消", null);
-//                builder.setPositiveButton("确定", null);
                 builder.setCancelable(true);
                 builder.setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
