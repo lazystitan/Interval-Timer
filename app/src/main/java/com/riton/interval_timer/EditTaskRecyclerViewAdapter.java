@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -21,12 +22,21 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
 
 //    private Task task;
     private Context context;
-    private List<MyActivity> activities;
+    private List<String> names;
+    private List<Integer> times;
 
     public EditTaskRecyclerViewAdapter(Context _context,Task _task)
     {
         context = _context;
-        activities = _task.getActivities();
+//        for (String name: _task.getActivitiesNames())
+//            names.add(name);
+        names = new ArrayList<>();
+        times = new ArrayList<>();
+
+        names.addAll(_task.getActivitiesNames());
+        for (int i = 0; i < names.size(); i++) {
+            times.add(_task.getAcitvityTimeByName(names.get(i)));
+        }
     }
 
     @NonNull
@@ -40,9 +50,9 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
 
     @Override
     public void onBindViewHolder(@NonNull ActivityViewHolder activityViewHolder, int i) {
-            MyActivity myActivity = activities.get(i);
-            activityViewHolder.activityName.setText(myActivity.getName());
-            activityViewHolder.activityTime.setText(new StringBuilder("活动时长：").append(myActivity.getActivityTime()).toString());
+//            MyActivity myActivity = activities.get(i);
+            activityViewHolder.activityName.setText(names.get(i));
+            activityViewHolder.activityTime.setText(new StringBuilder("活动时长：").append(times.get(i)).toString());
             activityViewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -101,7 +111,7 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
 
     @Override
     public int getItemCount() {
-        return activities.size();
+        return names.size();
     }
 
     public static  class ActivityViewHolder extends RecyclerView.ViewHolder{

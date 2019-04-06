@@ -4,11 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+
+import static android.content.ContentValues.TAG;
 
 public class Task implements Serializable
 {
@@ -18,8 +24,11 @@ public class Task implements Serializable
     private String name;
     private int circulationNumber;
     private int activityNumber;
-    private int [] activityIds;
-    private List<MyActivity> activities;
+    private JSONObject complexActivity;
+
+
+//    private int [] activityIds;
+//    private List<MyActivity> activities;
 
 //    private static int tasksNumber;
 //
@@ -31,24 +40,30 @@ public class Task implements Serializable
 //        return
 //    }
 
+    private void updateActivityNumber()
+    {
+        activityNumber = complexActivity.size();
+    }
+
     public Task(Context _context)
     {
         context = _context;
         id = 0;
-        activities = new ArrayList<MyActivity>();
+        complexActivity = new JSONObject();
     }
 
     //构造方法
-    public Task(Context _context,int _id, String _name, int _circulationNumber, int _activityNumber, int [] _activityIds)
+    public Task(Context _context,int _id, String _name, int _circulationNumber, String _complexActivity)
     {
         context = _context;
 
         id = _id;
         name = _name;
         circulationNumber = _circulationNumber;
-        activityNumber = _activityNumber;
-        activityIds = _activityIds;
-        activities = new ArrayList<MyActivity>();
+        complexActivity = JSONObject.parseObject(_complexActivity);
+        activityNumber = this.complexActivity.size();
+//        activityIds = _activityIds;
+//        activities = new ArrayList<MyActivity>();
     }
 
     //获得属性
@@ -83,20 +98,20 @@ public class Task implements Serializable
         return activityNumber;
     }
 
-    public int [] getActivityIds()
-    {
-        return activityIds;
-    }
+//    public int [] getActivityIds()
+//    {
+//        return activityIds;
+//    }
 
     //保存到数据库
     public void saveTask()
     {
-        StringBuilder activityIdsString = new StringBuilder();
-        for (int id:activityIds) {
-            activityIdsString.append(String.valueOf(id));
-            activityIdsString.append(",");
-        }
-        activityIdsString.deleteCharAt(activityIdsString.length()-1);
+//        StringBuilder activityIdsString = new StringBuilder();
+//        for (int id:activityIds) {
+//            activityIdsString.append(String.valueOf(id));
+//            activityIdsString.append(",");
+//        }
+//        activityIdsString.deleteCharAt(activityIdsString.length()-1);
 
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -105,8 +120,8 @@ public class Task implements Serializable
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         contentValues.put("circulationNumber",circulationNumber);
-        contentValues.put("activityNumber",activityNumber);
-        contentValues.put("activityIds", activityIdsString.toString());
+//        contentValues.put("activityNumber",activityNumber);
+        contentValues.put("complexActivityString", complexActivity.toString());
         db.insertOrThrow("task",null,contentValues);
 
         db.setTransactionSuccessful();
@@ -126,33 +141,38 @@ public class Task implements Serializable
             id = cursor.getInt(0);
             name = cursor.getString(1);
             circulationNumber = cursor.getInt(2);
-            activityNumber = cursor.getInt(3);
-            String [] temp = cursor.getString(4).split(",");
-            activityIds = new int[temp.length];
-            for (int i=0; i<temp.length;i++)
-                activityIds[i] = Integer.valueOf(temp[i]);
+            complexActivity = JSONObject.parseObject(cursor.getString(3));
+            System.out.println("complexActivity的大小是："+complexActivity.size());
+//            Log.d(TAG, "getTask: "+complexActivity.size());
+            updateActivityNumber();
 
-            System.out.println("******This task info******");
-            System.out.println("id:"+id);
-            System.out.println("name:"+name);
-            System.out.println("circulationNumber:"+ circulationNumber);
-            System.out.println("activityNumber:"+activityNumber);
+//            activityNumber = cursor.getInt(3);
+//            String [] temp = cursor.getString(4).split(",");
+//            activityIds = new int[temp.length];
+//            for (int i=0; i<temp.length;i++)
+//                activityIds[i] = Integer.valueOf(temp[i]);
+
+//            System.out.println("******This task info******");
+//            System.out.println("id:"+id);
+//            System.out.println("name:"+name);
+//            System.out.println("circulationNumber:"+ circulationNumber);
+//            System.out.println("activityNumber:"+activityNumber);
 //            System.out.println(activityIds);
-            for (int id:activityIds)
-                System.out.println(id);
-            System.out.println("**************************");
+//            for (int id:activityIds)
+//                System.out.println(id);
+//            System.out.println("**************************");
 
-            for (int id:activityIds)
-            {
-                MyActivity myActivity = new MyActivity(context);
-                myActivity.setId(id);
-                myActivity.getActivity();
-                System.out.println(myActivity.getName());
-                System.out.println(myActivity.getActivityTime());
-                activities.add(myActivity);
-            }
+//            for (int id:activityIds)
+//            {
+//                MyActivity myActivity = new MyActivity(context);
+//                myActivity.setId(id);
+//                myActivity.getActivity();
+//                System.out.println(myActivity.getName());
+//                System.out.println(myActivity.getActivityTime());
+//                activities.add(myActivity);
+//            }
 
-            getActivitiesById();
+//            getActivitiesById();
         }
         else
         {
@@ -163,18 +183,18 @@ public class Task implements Serializable
         db.close();
     }
 
-    private void getActivitiesById()
-    {
-        for (MyActivity myActivity:activities)
-            myActivity.getActivity();
-    }
+//    private void getActivitiesById()
+//    {
+//        for (MyActivity myActivity:activities)
+//            myActivity.getActivity();
+//    }
 
     public int getComplexActivityTime()
     {
         int complexActivityTime = 0;
 
-        for (MyActivity myActivity: activities)
-            complexActivityTime += myActivity.getActivityTime();
+        for (Object activityTime: complexActivity.values())
+            complexActivityTime += (int) activityTime;
 
         return complexActivityTime;
     }
@@ -185,30 +205,32 @@ public class Task implements Serializable
         return circulationNumber*complexActivityTime;
     }
 
-    public String getActivitiesNames()
+//    public String getActivitiesNames()
+//    {
+//        complexActivity
+//
+//        return names.toString();
+//    }
+    public Set<String> getActivitiesNames()
     {
-        StringBuilder names = new StringBuilder();
-
-        for(MyActivity myActivity:activities)
-        {
-            names.append(myActivity.getName());
-            names.append(",");
-        }
-        names.deleteCharAt(names.length()-1);
-        names.append(".");
-
-        return names.toString();
+        return complexActivity.keySet();
     }
 
-    public List<MyActivity> getActivities()
+//    public List<MyActivity> getActivities()
+//    {
+//        return new ArrayList<MyActivity>(activities);
+//    }
+
+    public int getAcitvityTimeByName(String activityName)
     {
-        return new ArrayList<MyActivity>(activities);
+        return complexActivity.getInteger(activityName);
     }
 
-    public void addActivity(MyActivity _activity)
+    public void addActivity(String key, int value)
     {
-        activities.add(_activity);
-        activityNumber +=1;
+        complexActivity.put(key,value);
+//        activities.add(_activity);
+//        activityNumber +=1;
     }
 
 //    public MyActivity deleteActivityByName(String activityName)

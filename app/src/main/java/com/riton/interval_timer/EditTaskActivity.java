@@ -76,6 +76,8 @@ public class EditTaskActivity extends AppCompatActivity {
             //设置task的id并从数据库中获取信息补全对象
             task.setId(id);
             task.getTask();
+            if (task == null)
+                System.out.println("task获取失败！");
             recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task));
             //设置展示的信息
             taskName.setText(task.getName());
@@ -116,10 +118,10 @@ public class EditTaskActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //新创建的一个活动对象，并通过在对话框中的数据初始化
-                                MyActivity activity =
-                                        new MyActivity(context,getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
+//                                MyActivity activity =
+//                                        new MyActivity(context,getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
                                 //将这个新的activity加入到task的任务中
-                                task.addActivity(activity);
+                                task.addActivity(getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
                                 //重新设置recycler的adapter以刷新页面
                                 recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(context,task));
 
@@ -154,10 +156,15 @@ public class EditTaskActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if  (temp.length() == 0)
-                    return;
+                boolean isEmpty = false;
+                if  (temp.length() == 0) {
+                    isEmpty = true;
+                }
                 int cu;
-                cu = Integer.valueOf(String.valueOf(temp));
+                if (isEmpty)
+                    cu = 0;
+                else
+                    cu = Integer.valueOf(String.valueOf(temp));
                 task.setCirculationNumber(cu);
                 totalTime.setText(new StringBuilder("总时长：")
                         .append(String.valueOf(task.getTotalTime()).toString()));

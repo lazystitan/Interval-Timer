@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskViewHolder> {
 
@@ -69,7 +70,13 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
 
         taskName.append(thisTask.getName());
         circulationNumber.append(String.valueOf(thisTask.getCirculationNumber()));
-        containedActivities.append(thisTask.getActivitiesNames());
+//        containedActivities.append(thisTask.getActivitiesNames());
+        Set<String> activityNames = thisTask.getActivitiesNames();
+        for (String name:activityNames) {
+            containedActivities.append(name);
+            containedActivities.append(',');
+        }
+        containedActivities.deleteCharAt(containedActivities.length()-1);
         totalTime.append(String.valueOf(thisTask.getTotalTime()));
 
         taskViewHolder.taskName.setText(taskName.toString());
