@@ -89,12 +89,30 @@ public class Task implements Serializable
 
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
-        contentValues.put("circulationNumber",circulationNumber);
-        contentValues.put("complexActivityString", complexActivity.toString());
+        contentValues.put("circulation_number",circulationNumber);
+        contentValues.put("complex_activity_string", complexActivity.toString());
         db.insertOrThrow("task",null,contentValues);
 
         db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
+    }
+
+    public void updateTask()
+    {
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "update task set circulation_number = "+circulationNumber
+                +",complex_activity_string = '" + complexActivity.toString()
+                +"'where id = "+id;
+
+//        db.rawQuery(sql,null);
+        db.execSQL(sql);
+
+//        db.setTransactionSuccessful();
+        db.close();
+
     }
 
     //从数据库读取
@@ -120,6 +138,20 @@ public class Task implements Serializable
             id = -1;
         }
         cursor.close();
+        db.close();
+    }
+
+    public void deleteTask()
+    {
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String sql = "delete from task where id ="+id;
+
+//        db.rawQuery(sql,null);
+        db.execSQL(sql);
+
+//        db.setTransactionSuccessful();
         db.close();
     }
 
@@ -153,5 +185,11 @@ public class Task implements Serializable
     public void addActivity(String key, int value)
     {
         complexActivity.put(key,value);
+    }
+
+    public void deleteActivityByName(String name)
+    {
+        complexActivity.remove(name);
+        updateActivityNumber();
     }
 }

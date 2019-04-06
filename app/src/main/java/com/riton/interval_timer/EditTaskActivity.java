@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +36,14 @@ public class EditTaskActivity extends AppCompatActivity {
 
     private Task task;
 
+    private boolean isNew;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
-        TaskSavingApplication taskSavingApplication = (TaskSavingApplication) this.getApplication();
+        final TaskSavingApplication taskSavingApplication = (TaskSavingApplication) this.getApplication();
         //创建一个新的空的task对象
         task = new Task(getApplicationContext());
         //将它的引用保存在全局变量中
@@ -60,15 +63,16 @@ public class EditTaskActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        //id=1代表编辑任务，id=-1代表
+        //id=1代表编辑任务，id=-1代表新建任务
         if (id != -1) {
-
+            isNew = false;
             //设置task的id并从数据库中获取信息补全对象
             task.setId(id);
             task.getTask();
             if (task == null)
                 System.out.println("task获取失败！");
-            recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task));
+            recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task,taskSavingApplication,
+                    totalTime, complexActivityTime, circulationNumber));
             //设置展示的信息
             taskName.setText(task.getName());
             totalTime.setText(new StringBuilder("总时长：").append(String.valueOf(task.getTotalTime()).toString()));
@@ -78,12 +82,14 @@ public class EditTaskActivity extends AppCompatActivity {
         }
         else
         {
+            isNew = true;
             String name = intent.getStringExtra("name");
             //设置顶部的task名
             taskName.setText(name);
             //为空的task添加名字
             task.setName(name);
-            recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task));
+            recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(this, task, taskSavingApplication,
+                    totalTime, complexActivityTime, circulationNumber));
         }
 
         //为添加任务的按钮绑定响应方法
@@ -110,7 +116,8 @@ public class EditTaskActivity extends AppCompatActivity {
                                 //将这个新的activity加入到task的任务中
                                 task.addActivity(getName.getText().toString(),Integer.valueOf(getTime.getText().toString()));
                                 //重新设置recycler的adapter以刷新页面
-                                recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(context,task));
+                                recyclerView.setAdapter(new EditTaskRecyclerViewAdapter(context,task, taskSavingApplication,
+                                        totalTime, complexActivityTime, circulationNumber));
 
                                 //更新其他要显示的信息
                                 totalTime.setText(new StringBuilder("总时长：")
@@ -158,5 +165,30 @@ public class EditTaskActivity extends AppCompatActivity {
                         append(String.valueOf(task.getComplexActivityTime())));
             }
         });
+
+        ((Button) findViewById(R.id.finish_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isNew) {
+                    task.saveTask();
+                    System.out.println("save completed!");
+                }
+                else {
+                    task.updateTask();
+                    System.out.println("update completed!");
+                }
+//                setResult(0);
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+        ((Button) findViewById(R.id.cancel_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+//        recyclerView.set
     }
 }

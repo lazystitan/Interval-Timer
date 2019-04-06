@@ -41,6 +41,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.execSQL("insert into task (name,circulation_number,complex_activity_string) values ('跑步',3,'"+running.toString()+"')");
         db.execSQL("insert into task (name,circulation_number,complex_activity_string) values ('瑜伽',5,'"+yoga.toString()+"')");
+//        db.close();
     }
 
     @Override
@@ -48,14 +49,15 @@ public class DbHelper extends SQLiteOpenHelper {
         //暂时不写
     }
 
-    public int getTaskCount()
-    {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from task",null);
-        int taskCount = cursor.getCount();
-        cursor.close();
-        return  taskCount;
-    }
+//    public int getTaskCount()
+//    {
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery("select * from task",null);
+//        int taskCount = cursor.getCount();
+//        cursor.close();
+//        db.close();
+//        return  taskCount;
+//    }
 
 
 }

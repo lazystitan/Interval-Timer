@@ -1,5 +1,6 @@
 package com.riton.interval_timer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select id from task",null);
+        System.out.println("数据库中有"+cursor.getCount()+"条记录");
         while(cursor.moveToNext())
         {
             int id = cursor.getInt(0);
@@ -40,7 +42,7 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
             taskList.add(task);
         }
         cursor.close();
-
+        db.close();
     }
 
     @NonNull
@@ -58,6 +60,7 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
     public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
 
         final Task thisTask = taskList.get(i);
+        final int position = i;
         StringBuilder taskName = new StringBuilder("任务名:");
         StringBuilder circulationNumber = new StringBuilder("循环次数:");
         StringBuilder containedActivities = new StringBuilder("包含活动:");
@@ -85,7 +88,9 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
                 Intent intent = new Intent(context, EditTaskActivity.class);
                 intent.putExtra("id",thisTask.getId());
 //                intent.putExtra("taskName",thisTask.getName());
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent,100);
+//                context.startActivityForResult(intent, 1);
+
             }
         });
 
@@ -98,7 +103,9 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        thisTask.deleteTask();
+                        taskList.remove(position);
+                        notifyItemRemoved(position);
                     }
                 });
 //                    builder.setCancelable(true);

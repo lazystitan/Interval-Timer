@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                                 String taskName = editTaskNameAlterDialog.getText().toString();
                                 Intent intent =new Intent(context, EditTaskActivity.class);
                                 intent.putExtra("name",taskName);
-                                context.startActivity(intent);
+                                startActivityForResult(intent,100);
                             }
                         });
                 AlertDialog alert = builder.create();
@@ -68,5 +69,19 @@ public class MainActivity extends AppCompatActivity {
         taskSavingApplication.setTestFlag(100);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode)
+        {
+            case 100:
+                if (resultCode == RESULT_OK) {
+                    recyclerView.setAdapter(new MainActivityAdapter(this));
+//                    recyclerView.notifyAll();
+                    System.out.println("success!!");
+                }
+        }
     }
 }
