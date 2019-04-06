@@ -1,11 +1,14 @@
 package com.riton.interval_timer;
 
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,9 +25,10 @@ public class CountDownActivity extends AppCompatActivity {
    private TextView circulation;
    private TextView activityName;
    private Task task;
-   private CountDownTimer countDownTimer;
+//   private CountDownTimer countDownTimer;
+   private List<CountDownTimer> countDownTimerList = new ArrayList<>();
     //   private DBHelper mDataBase;
-   private Boolean isFinish=false;
+   private Boolean isFinish=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,9 @@ public class CountDownActivity extends AppCompatActivity {
         task.getTask();
 
         List<String> names = new ArrayList<>();
+        List<String> allnames = new ArrayList<>();
         List<Integer> times = new ArrayList<>();
+        List<String> displayCirculaition = new ArrayList<>();
 
 
         names.addAll(task.getActivitiesNames());
@@ -52,17 +58,19 @@ public class CountDownActivity extends AppCompatActivity {
 
 
 
+
         //   private long startTime;
         for (int j = 0; j < task.getCirculationNumber(); j++) {
-            String circulationString = "循环"+String.valueOf(j+1)+"/"+String.valueOf(task.getCirculationNumber());
-            circulation.setText(circulationString);
+//            String circulationString = "循环"+String.valueOf(j+1)+"/"+String.valueOf(task.getCirculationNumber());
+//            circulation.setText(circulationString);
             for (int i = 0; i < names.size(); i++) {
                 long activityTime = times.get(i);
                 activityTime = activityTime * 1000;
+                allnames.add(names.get(i));
+                displayCirculaition.add(String.valueOf(j+1)+"/"+String.valueOf(task.getCirculationNumber()));
+//                activityName.setText(names.get(i));
 
-                activityName.setText(names.get(i));
-
-                countDownTimer = new CountDownTimer(activityTime, 1000) {
+                countDownTimerList.add(new CountDownTimer(activityTime, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         long value = millisUntilFinished / 1000;
@@ -70,31 +78,74 @@ public class CountDownActivity extends AppCompatActivity {
                         System.out.println(mTv);
                         mTvValue.setText(mTv);
                     }
-
                     @Override
                     public void onFinish() {
+                        isFinish = true;
                         mTvValue.setText("00:00");
+
 //                 getFinish();
                     }
-                };
-//        startTime=SystemClock.elapsedRealtime();
-                countDownTimer.start();
-//                countDownTimer.join();
-
+                });
             }
+
 //            getFinish();
         }
 
+        System.out.println("allnames.size() is :"+allnames.size());
+        for (int i = 0; i < allnames.size(); i++) {
+            System.out.println("-----------------");
+            System.out.print(allnames.get(i));
+            System.out.print("：");
+            System.out.println(displayCirculaition.get(i));
+            System.out.println("-----------------");
+        }
+
+        Runnable r = ()->{
+            Vibrator vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
+//            boolean isFinish = true;
+            int i = 0;
+            while(isFinish && i < countDownTimerList.size())
+            {
+                circulation.setText(displayCirculaition.get(i));
+                activityName.setText(allnames.get(i));
+                isFinish = false;
+                System.out.println("isFinish is "+isFinish);
+                countDownTimerList.get(i).start();
+                while(!isFinish)
+                    continue;
+                System.out.println("结束");
+                vibrator.vibrate(VibrationEffect.createOneShot(500,128));
+
+                i++;
+            }
+        };
+
+        Thread t = new Thread(r);
+        t.start();
+
+//        int i = 0;
+//        while(isFinish|| (i >= countDownTimerList.size() -1))
+//        {
+//            circulation.setText(displayCirculaition.get(i));
+//            activityName.setText(allnames.get(i));
+//            isFinish = false;
+//            System.out.println("isFinish is "+isFinish);
+//            countDownTimerList.get(i).start();
+//            while(!isFinish)
+//                continue;
+//            System.out.println("结束");
+//            i++;
+//        }
 
     }
-    public void getFinish(){
-        isFinish=true;
-        ConstraintLayout recording= (ConstraintLayout) findViewById(R.id.recording);
-        recording.setVisibility(View.GONE);
-        ConstraintLayout complete= (ConstraintLayout) findViewById(R.id.complete);
-        complete.setVisibility(View.VISIBLE);
-//        mDataBase.addPerform(id,startTime,TOTAL_TIME,isFinish);
-    }
+//    public void getFinish(){
+//        isFinish=true;
+//        ConstraintLayout recording= (ConstraintLayout) findViewById(R.id.recording);
+//        recording.setVisibility(View.GONE);
+//        ConstraintLayout complete= (ConstraintLayout) findViewById(R.id.complete);
+//        complete.setVisibility(View.VISIBLE);
+////        mDataBase.addPerform(id,startTime,TOTAL_TIME,isFinish);
+//    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode==KeyEvent.KEYCODE_BACK)
@@ -107,7 +158,12 @@ public class CountDownActivity extends AppCompatActivity {
                 confirmDelete.setPositiveButton("确定",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                countDownTimer.cancel();
+//                                countDownTimer.cancel();
+                                for (CountDownTimer countDownTimer: countDownTimerList)
+                                {
+                                    if (countDownTimer != null)
+                                        countDownTimer.cancel();
+                                }
                                 finish();
                                 dialog.cancel();
                             }
