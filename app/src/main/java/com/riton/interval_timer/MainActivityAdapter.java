@@ -123,6 +123,15 @@ class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.TaskV
             }
         });
 
+        taskViewHolder.start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,CountDownActivity.class);
+                intent.putExtra("id",thisTask.getId());
+                ((Activity) context).startActivity(intent);
+            }
+        });
+
     }
 
     @Override

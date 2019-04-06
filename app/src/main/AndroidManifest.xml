@@ -10,6 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".CountDownActivity"
+            android:parentActivityName=".MainActivity"
+            >
+
+        </activity>
         <activity android:name=".EditTaskActivity"
             android:parentActivityName=".MainActivity"
             >
