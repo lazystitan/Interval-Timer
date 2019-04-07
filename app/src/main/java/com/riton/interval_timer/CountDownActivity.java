@@ -40,112 +40,27 @@ public class CountDownActivity extends AppCompatActivity {
 //        mDataBase=new DBHelper(CountDownActivity.this);
         Intent intent = getIntent();
         int id=intent.getIntExtra("id",0);
+
+        Intent startServiceIntent = new Intent(this,CountDownTimerService.class);
+        startServiceIntent.putExtra("id",id);
+        startService(startServiceIntent);
+
+//        ChangeCirNameReceiver changeCirNameReceiver = new ChangeCirNameReceiver();
+//        ChangeTimeReceiver changeTimeReceiver = new ChangeTimeReceiver();
+//        FinishCountReceiver finishCountReceiver = new FinishCountReceiver();
+//        changeCirNameReceiver.onReceive(getApplicationContext(),null);
+//
+
 //        TOTAL_TIME=(long)mDataBase.getTask(id).getLength();
-        task = new Task(getApplicationContext());
-        task.setId(id);
-        task.getTask();
-
-        List<String> names = new ArrayList<>();
-        List<String> allnames = new ArrayList<>();
-        List<Integer> times = new ArrayList<>();
-        List<String> displayCirculaition = new ArrayList<>();
-
-
-        names.addAll(task.getActivitiesNames());
-        for (int j = 0; j < names.size(); j++) {
-            times.add(task.getAcitvityTimeByName(names.get(j)));
-        }
+//        task = new Task(getApplicationContext());
+//        task.setId(id);
+//        task.getTask();
 
 
 
-
-        //   private long startTime;
-        for (int j = 0; j < task.getCirculationNumber(); j++) {
-//            String circulationString = "循环"+String.valueOf(j+1)+"/"+String.valueOf(task.getCirculationNumber());
-//            circulation.setText(circulationString);
-            for (int i = 0; i < names.size(); i++) {
-                long activityTime = times.get(i);
-                activityTime = activityTime * 1000;
-                allnames.add(names.get(i));
-                displayCirculaition.add(String.valueOf(j+1)+"/"+String.valueOf(task.getCirculationNumber()));
-//                activityName.setText(names.get(i));
-
-                countDownTimerList.add(new CountDownTimer(activityTime, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        long value = millisUntilFinished / 1000;
-                        String mTv = String.valueOf(value / 60) + ":" + String.valueOf(value % 60);
-                        System.out.println(mTv);
-                        mTvValue.setText(mTv);
-                    }
-                    @Override
-                    public void onFinish() {
-                        isFinish = true;
-                        mTvValue.setText("00:00");
-
-//                 getFinish();
-                    }
-                });
-            }
-
-//            getFinish();
-        }
-
-        System.out.println("allnames.size() is :"+allnames.size());
-        for (int i = 0; i < allnames.size(); i++) {
-            System.out.println("-----------------");
-            System.out.print(allnames.get(i));
-            System.out.print("：");
-            System.out.println(displayCirculaition.get(i));
-            System.out.println("-----------------");
-        }
-
-        Runnable r = ()->{
-            Vibrator vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
-//            boolean isFinish = true;
-            int i = 0;
-            while(isFinish && i < countDownTimerList.size())
-            {
-                circulation.setText(displayCirculaition.get(i));
-                activityName.setText(allnames.get(i));
-                isFinish = false;
-                System.out.println("isFinish is "+isFinish);
-                countDownTimerList.get(i).start();
-                while(!isFinish)
-                    continue;
-                System.out.println("结束");
-                vibrator.vibrate(VibrationEffect.createOneShot(500,128));
-
-                i++;
-            }
-        };
-
-        Thread t = new Thread(r);
-        t.start();
-
-//        int i = 0;
-//        while(isFinish|| (i >= countDownTimerList.size() -1))
-//        {
-//            circulation.setText(displayCirculaition.get(i));
-//            activityName.setText(allnames.get(i));
-//            isFinish = false;
-//            System.out.println("isFinish is "+isFinish);
-//            countDownTimerList.get(i).start();
-//            while(!isFinish)
-//                continue;
-//            System.out.println("结束");
-//            i++;
-//        }
 
     }
-//    public void getFinish(){
-//        isFinish=true;
-//        ConstraintLayout recording= (ConstraintLayout) findViewById(R.id.recording);
-//        recording.setVisibility(View.GONE);
-//        ConstraintLayout complete= (ConstraintLayout) findViewById(R.id.complete);
-//        complete.setVisibility(View.VISIBLE);
-////        mDataBase.addPerform(id,startTime,TOTAL_TIME,isFinish);
-//    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode==KeyEvent.KEYCODE_BACK)
@@ -159,11 +74,13 @@ public class CountDownActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 //                                countDownTimer.cancel();
-                                for (CountDownTimer countDownTimer: countDownTimerList)
-                                {
-                                    if (countDownTimer != null)
-                                        countDownTimer.cancel();
-                                }
+//                                for (CountDownTimer countDownTimer: countDownTimerList)
+//                                {
+//                                    if (countDownTimer != null)
+//                                        countDownTimer.cancel();
+//                                }
+                                Intent stopService = new Intent(getApplicationContext(),CountDownTimerService.class);
+                                stopService(stopService);
                                 finish();
                                 dialog.cancel();
                             }

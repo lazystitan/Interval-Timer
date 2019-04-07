@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.riton.interval_timer">
 
-    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".TaskSavingApplication"
         android:allowBackup="true"
@@ -11,17 +12,37 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".FinishCountReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.riton.FINISH_COUNT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ChangeCirNameReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.riton.CHANGE_CIR_NAME" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ChangeTimeReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.riton.CHANGE_TIME" />
+            </intent-filter>
+        </receiver>
 
-        <activity android:name=".CountDownActivity"
-            android:parentActivityName=".MainActivity"
-            >
-
-        </activity>
-        <activity android:name=".EditTaskActivity"
-            android:parentActivityName=".MainActivity"
-            >
-
-        </activity>
+        <activity
+            android:name=".CountDownActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".EditTaskActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +50,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".CountDownTimerService" />
     </application>
 
 </manifest>
